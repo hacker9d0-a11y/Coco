@@ -1,10 +1,13 @@
-import { createRoot } from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import 
+USOnlyGuard from "./components/USOnlyGuard";
 
-import App from './App';
-
-import './index.css';
-
-// Force dark mode for the entire app
-document.documentElement.classList.add('dark');
-
-createRoot(document.getElementById('root')!).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <USOnlyGuard>
+      <App />
+    </USOnlyGuard>
+  </React.StrictMode>
+);
