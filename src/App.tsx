@@ -6,9 +6,9 @@ import { useBankState } from './hooks/use-bank-state';
 import { SetupScreen } from './pages/setup';
 import { LoginScreen } from './pages/login';
 import { DashboardScreen } from './pages/dashboard';
+import { InviteScreen } from './pages/invite';
 import NotFound from '@/pages/not-found';
 import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -26,76 +26,50 @@ function BankAppShell() {
     pauseTransfer,
     resumeTransfer,
     completeTransfer,
-    useInviteLink,
     getInviteToken,
   } = useBankState();
-
-  const [inviteMsg, setInviteMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('invite');
-    if (!token) return;
-
-    window.history.replaceState({}, '', '/');
-
-    useInviteLink(token).then(result => {
-      if (result.success) {
-        setInviteMsg(`¡Link de invitación canjeado! +$1,000.00 añadidos a la cuenta.`);
-      } else if (result.error === 'Already used on this device') {
-        setInviteMsg('Este link ya fue usado en este dispositivo.');
-      } else {
-        setInviteMsg('Link de invitación inválido o expirado.');
-      }
-      setTimeout(() => setInviteMsg(null), 5000);
-    });
-  }, []);
-
-  const inviteBanner = inviteMsg && (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-primary text-background text-sm font-semibold px-4 py-2 rounded-xl shadow-lg">
-      {inviteMsg}
-    </div>
-  );
 
   if (authState === 'loading') {
     return (
       <div className="min-h-[100dvh] w-full flex items-center justify-center bg-background">
-        {inviteBanner}
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
     );
   }
 
-  if (authState === 'setup') return <>{inviteBanner}<SetupScreen setupAccount={setupAccount} /></>;
-  if (authState === 'login') return <>{inviteBanner}<LoginScreen login={login} /></>;
+  if (authState === 'setup') return <SetupScreen setupAccount={setupAccount} />;
+  if (authState === 'login') return <LoginScreen login={login} />;
 
   if (authState === 'dashboard') {
     return (
-      <>
-        {inviteBanner}
-        <DashboardScreen
-          startTime={startTime}
-          hourlyRate={hourlyRate}
-          bonusBalance={bonusBalance}
-          transfer={transfer}
-          logout={logout}
-          startTransfer={startTransfer}
-          pauseTransfer={pauseTransfer}
-          resumeTransfer={resumeTransfer}
-          completeTransfer={completeTransfer}
-          getInviteToken={getInviteToken}
-        />
-      </>
+      <DashboardScreen
+        startTime={startTime}
+        hourlyRate={hourlyRate}
+        bonusBalance={bonusBalance}
+        transfer={transfer}
+        logout={logout}
+        startTransfer={startTransfer}
+        pauseTransfer={pauseTransfer}
+        resumeTransfer={resumeTransfer}
+        completeTransfer={completeTransfer}
+        getInviteToken={getInviteToken}
+      />
     );
   }
 
   return null;
 }
 
+function InviteRoute({ params }: { params: { token: string } }) {
+  const { useInviteLink } = useBankState();
+  return <InviteScreen token={params.token} useInviteLink={useInviteLink} />;
+}
+
 function Router() {
   return (
     <Switch>
       <Route path="/" component={BankAppShell} />
+      <Route path="/invite/:token" component={InviteRoute} />
       <Route component={NotFound} />
     </Switch>
   );

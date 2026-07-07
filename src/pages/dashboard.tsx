@@ -259,7 +259,7 @@ export function DashboardScreen({
   const handleShowInvite = async () => {
     if (inviteLink) { setShowInvite(v => !v); return; }
     const token = await getInviteToken();
-    setInviteLink(`${window.location.origin}/?invite=${token}`);
+    setInviteLink(`${window.location.origin}/invite/${token}`);
     setShowInvite(true);
   };
 
