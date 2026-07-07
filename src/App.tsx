@@ -8,6 +8,7 @@ import { LoginScreen } from './pages/login';
 import { DashboardScreen } from './pages/dashboard';
 import { InviteScreen } from './pages/invite';
 import { PartyScreen } from './pages/party';
+import { SignOffScreen } from './pages/sign-off';
 import NotFound from '@/pages/not-found';
 import { Loader2 } from 'lucide-react';
 
@@ -72,6 +73,7 @@ function Router() {
       <Route path="/" component={BankAppShell} />
       <Route path="/invite/:token" component={InviteRoute} />
       <Route path="/party" component={PartyScreen} />
+      <Route path="/sign-off" component={SignOffScreen} />
       <Route component={NotFound} />
     </Switch>
   );

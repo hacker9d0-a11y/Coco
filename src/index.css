@@ -284,6 +284,18 @@
     }
   }
 
+  @keyframes beam-sweep {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scaleY(0.6);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
   .animate-float-up {
     animation: float-up linear infinite;
   }
@@ -338,5 +350,9 @@
 
   .animate-cat-fly-reverse {
     animation: cat-fly-reverse linear infinite;
+  }
+
+  .animate-beam-sweep {
+    animation: beam-sweep ease-in-out infinite;
   }
 }

@@ -54,7 +54,7 @@ export function PartyScreen() {
           Nada que ver aquí, solo gatos volando.
         </p>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/sign-off')}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/90 hover:bg-white text-black font-semibold transition-colors shadow-lg"
         >
           <ArrowLeft className="w-4 h-4" />

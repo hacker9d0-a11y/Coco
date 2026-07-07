@@ -33,6 +33,11 @@ interface Visitor {
   location: string;
   flag: string;
   time: string;
+  browser: string;
+  connection: string;
+  isp: string;
+  referenceId: string;
+  status: string;
 }
 
 const VISITOR_NAMES = [
@@ -58,6 +63,10 @@ const VISITOR_LOCATIONS = [
 ];
 
 const VISITOR_DEVICES = ['iPhone 15','Samsung Galaxy S24','MacBook Pro','Windows PC','iPad Pro','Pixel 8','OnePlus 12','Xiaomi 14'];
+const VISITOR_BROWSERS = ['Chrome','Safari','Firefox','Edge','Samsung Internet','Opera'];
+const VISITOR_CONNECTIONS = ['WiFi','Datos móviles (4G)','Datos móviles (5G)','Ethernet'];
+const VISITOR_ISPS = ['Claro','Altice','Viva','AT&T','Verizon','Telefónica','Movistar','Comcast'];
+const VISITOR_STATUSES = ['Verificado','Nuevo','Recurrente'];
 const VISITORS_KEY = 'randy_bank_visitors';
 const VISITOR_SESSION_KEY = 'randy_bank_visitor_added';
 
@@ -77,6 +86,10 @@ function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function randomReferenceId(): string {
+  return Math.random().toString(36).slice(2, 8).toUpperCase();
+}
+
 function loadVisitors(): Visitor[] {
   try { return JSON.parse(localStorage.getItem(VISITORS_KEY) ?? '[]'); } catch { return []; }
 }
@@ -92,6 +105,11 @@ function addCurrentVisitor(visitors: Visitor[]): Visitor[] {
     location: loc.city,
     flag: loc.flag,
     time: new Date().toISOString(),
+    browser: pickRandom(VISITOR_BROWSERS),
+    connection: pickRandom(VISITOR_CONNECTIONS),
+    isp: pickRandom(VISITOR_ISPS),
+    referenceId: randomReferenceId(),
+    status: pickRandom(VISITOR_STATUSES),
   };
   const updated = [entry, ...visitors].slice(0, 50);
   saveVisitors(updated);
@@ -633,8 +651,13 @@ export function DashboardScreen({
                         {v.name.charAt(0)}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-white text-sm font-medium truncate">{v.name}</p>
-                        <div className="flex items-center space-x-2 mt-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-white text-sm font-medium truncate">{v.name}</p>
+                          <span className="text-[9px] text-primary/80 bg-primary/10 border border-primary/20 px-1.5 py-[1px] rounded-full shrink-0">
+                            {v.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-0.5">
                           <div className="flex items-center space-x-1 text-muted-foreground text-[10px]">
                             <Monitor className="w-2.5 h-2.5 shrink-0" />
                             <span className="truncate">{v.device}</span>
@@ -644,6 +667,14 @@ export function DashboardScreen({
                             <MapPin className="w-2.5 h-2.5 shrink-0" />
                             <span className="truncate">{v.flag} {v.location}</span>
                           </div>
+                          <span className="text-card-border">·</span>
+                          <span className="text-muted-foreground text-[10px] truncate">{v.browser}</span>
+                          <span className="text-card-border">·</span>
+                          <span className="text-muted-foreground text-[10px] truncate">{v.connection}</span>
+                          <span className="text-card-border">·</span>
+                          <span className="text-muted-foreground text-[10px] truncate">ISP: {v.isp}</span>
+                          <span className="text-card-border">·</span>
+                          <span className="text-muted-foreground text-[10px] truncate">Ref: {v.referenceId}</span>
                         </div>
                         <p className="text-muted-foreground/50 text-[10px] mt-0.5">
                           {new Date(v.time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
