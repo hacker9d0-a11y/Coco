@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'wouter';
 import { Gift, Loader2, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 
 type Status = 'loading' | 'success' | 'already-used' | 'invalid';
@@ -85,6 +86,7 @@ export function InviteScreen({
 }) {
   const [status, setStatus] = useState<Status>('loading');
   const [mounted, setMounted] = useState(false);
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     setMounted(true);
@@ -133,9 +135,17 @@ export function InviteScreen({
           {status === 'loading' && (
             <span className="absolute inset-0 rounded-2xl border-2 border-primary/20 border-t-primary animate-spin" />
           )}
-          <div
+          <button
+            type="button"
+            onClick={() => (status === 'already-used' || status === 'success') && navigate('/party')}
+            disabled={status !== 'already-used' && status !== 'success'}
+            aria-label={status === 'already-used' || status === 'success' ? 'Click' : undefined}
             className={`relative h-16 w-16 rounded-2xl flex items-center justify-center border shadow-[0_0_30px_rgba(0,200,150,0.15)] transition-transform duration-500 ${
               status === 'success' ? 'scale-100 animate-bounce-in' : 'scale-100'
+            } ${
+              status === 'already-used' || status === 'success'
+                ? 'cursor-pointer hover:scale-105 active:scale-95'
+                : 'cursor-default'
             } ${
               isError
                 ? 'bg-destructive/10 text-destructive border-destructive/20'
@@ -145,11 +155,14 @@ export function InviteScreen({
             {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
             {status === 'success' && <CheckCircle2 className="w-8 h-8" />}
             {status === 'invalid' && <XCircle className="w-8 h-8 animate-shake" />}
-          </div>
+          </button>
           {status === 'success' && (
             <Sparkles className="w-5 h-5 text-primary absolute -top-2 -right-2 animate-sparkle" />
           )}
         </div>
+        {(status === 'already-used' || status === 'success') && (
+          <span className="text-[11px] text-muted-foreground/70 -mt-4 mb-4 tracking-wide uppercase">Click</span>
+        )}
 
         {status === 'loading' && (
           <>
@@ -165,34 +178,4 @@ export function InviteScreen({
         {status === 'success' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
-              <Gift className="w-6 h-6 text-primary animate-wiggle" /> ¡Invitación canjeada!
-            </h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
-            </p>
-          </>
-        )}
-
-        {status === 'already-used' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
-            
-            </h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              .
-            </p>
-          </>
-        )}
-
-        {status === 'invalid' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">Link inválido</h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              Este link de invitación no es válido o ya expiró.
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+              <Gift className="w-6 h-6
