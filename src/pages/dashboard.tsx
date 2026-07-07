@@ -419,7 +419,7 @@ export function DashboardScreen({
           </button>
           {showInvite && inviteLink && (
             <div className="px-4 pb-4 space-y-2">
-              <p className="text-[10px] text-muted-foreground">Comparte este link. Cada persona que lo use recibirá $1,000 en tu cuenta. Solo funciona una vez por dispositivo.</p>
+              <p className="text-[10px] text-muted-foreground">.</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 bg-background rounded-lg px-3 py-2 text-[11px] text-muted-foreground font-mono truncate border border-card-border">
                   {inviteLink}
