@@ -143,11 +143,11 @@ export function SignOffScreen() {
           <span className="absolute inset-0 rounded-full bg-primary/30 blur-2xl animate-pulse-slow" />
           <h1 className="relative text-3xl sm:text-4xl font-extrabold tracking-widest text-primary animate-fade-in-up"
               style={{ textShadow: '0 0 20px hsl(165 100% 45% / 0.9), 0 0 60px hsl(165 100% 45% / 0.5)' }}>
-            SESIÓN FINALIZADA
+            ESPERA 1 MINUTO
           </h1>
         </div>
         <p className="font-mono text-xs text-primary/60 tracking-[0.2em] animate-fade-in-up [animation-delay:150ms]">
-          conexión cerrada de forma segura
+          
         </p>
       </div>
     </div>
