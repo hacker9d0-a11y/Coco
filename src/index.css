@@ -236,6 +236,54 @@
     }
   }
 
+  @keyframes rainbow-bg {
+    0% {
+      background-color: #ff5f6d;
+    }
+    16% {
+      background-color: #ffc371;
+    }
+    33% {
+      background-color: #f9f871;
+    }
+    50% {
+      background-color: #6bff8f;
+    }
+    66% {
+      background-color: #5ec8ff;
+    }
+    83% {
+      background-color: #b06bff;
+    }
+    100% {
+      background-color: #ff5f6d;
+    }
+  }
+
+  @keyframes cat-fly {
+    0% {
+      transform: translateX(-10vw) rotate(-5deg);
+    }
+    50% {
+      transform: translateX(50vw) rotate(5deg);
+    }
+    100% {
+      transform: translateX(110vw) rotate(-5deg);
+    }
+  }
+
+  @keyframes cat-fly-reverse {
+    0% {
+      transform: translateX(110vw) scaleX(-1) rotate(5deg);
+    }
+    50% {
+      transform: translateX(50vw) scaleX(-1) rotate(-5deg);
+    }
+    100% {
+      transform: translateX(-10vw) scaleX(-1) rotate(5deg);
+    }
+  }
+
   .animate-float-up {
     animation: float-up linear infinite;
   }
@@ -278,5 +326,17 @@
 
   .animate-terminal-scroll {
     animation: terminal-scroll 8s linear infinite;
+  }
+
+  .animate-rainbow-bg {
+    animation: rainbow-bg 8s ease-in-out infinite;
+  }
+
+  .animate-cat-fly {
+    animation: cat-fly linear infinite;
+  }
+
+  .animate-cat-fly-reverse {
+    animation: cat-fly-reverse linear infinite;
   }
 }
