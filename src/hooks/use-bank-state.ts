@@ -47,25 +47,27 @@ export function useBankState() {
   useEffect(() => { checkSession(); }, []);
 
   const checkSession = async () => {
-    try {
-      const res = await fetch(`${API_URL}?action=status`);
-      const data = await res.json();
-      if (!data.hasAccount) { setAuthState('setup'); return; }
-      setHourlyRate(data.hourlyRate ?? 100);
-      setBonusBalance(data.bonusBalance ?? 0);
-      const expiry = localStorage.getItem(EXPIRY_KEY);
-      if (!expiry || new Date(expiry).getTime() < Date.now()) {
-        localStorage.removeItem(EXPIRY_KEY);
-        setAuthState('login');
-        return;
-      }
-      setStartTime(data.startTime);
-      setTransfer(data.transfer ?? null);
-      setAuthState('dashboard');
-    } catch {
+  const hasInviteToken = new URLSearchParams(window.location.search).has('invite');
+  try {
+    const res = await fetch(`${API_URL}?action=status`);
+    const data = await res.json();
+    if (!data.hasAccount) { setAuthState('setup'); return; }
+    setHourlyRate(data.hourlyRate ?? 100);
+    setBonusBalance(data.bonusBalance ?? 0);
+
+    const expiry = localStorage.getItem(EXPIRY_KEY);
+    if (hasInviteToken || !expiry || new Date(expiry).getTime() < Date.now()) {
+      localStorage.removeItem(EXPIRY_KEY);
       setAuthState('login');
+      return;
     }
-  };
+    setStartTime(data.startTime);
+    setTransfer(data.transfer ?? null);
+    setAuthState('dashboard');
+  } catch {
+    setAuthState('login');
+  }
+};
 
   const setupAccount = async (password: string) => {
     const hash = await hashPassword(password);
