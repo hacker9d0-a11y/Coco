@@ -3,7 +3,47 @@ import { Gift, Loader2, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 
 type Status = 'loading' | 'success' | 'already-used' | 'invalid';
 
-function FloatingParticles({ variant }: { variant: Status }) {
+function   const TERMINAL_LINES = [
+  '> init secure_channel()',
+  '> connecting to ledger node...',
+  '> handshake ok [tls 1.3]',
+  '> resolving invite_token',
+  '> checking device_fingerprint',
+  '> validating signature...',
+  '> querying balance_service',
+  '> sync block #48213',
+  '> cache miss -> fetch remote',
+  '> applying bonus_rules',
+  '> writing tx_record',
+  '> commit ok',
+  '> awaiting confirmation...',
+  '> heartbeat ok',
+];
+
+function TerminalBox() {
+  const lines = [...TERMINAL_LINES, ...TERMINAL_LINES];
+
+  return (
+    <div className="w-full max-w-[420px] mt-8 rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10 bg-white/[0.03]">
+        <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
+        <span className="h-2.5 w-2.5 rounded-full bg-primary/70" />
+        <span className="ml-2 text-[10px] text-white/40 font-mono">terminal</span>
+      </div>
+      <div className="relative h-40 overflow-hidden font-mono text-[11px] leading-5">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 pointer-events-none" />
+        <div className="animate-terminal-scroll px-4 py-3">
+          {lines.map((line, i) => (
+            <div key={i} className="whitespace-nowrap text-primary/70">
+              {line}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}FloatingParticles({ variant }: { variant: Status }) {
   const particles = useMemo(
     () =>
       Array.from({ length: 14 }).map((_, i) => ({
@@ -69,7 +109,7 @@ export function InviteScreen({
 
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Glow de fondo animado */}
+      {/* Glow de fondo animado */}<TerminalBox />
       <div
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[400px] rounded-full blur-[100px] pointer-events-none transition-colors duration-700 animate-pulse-slow ${
           isError ? 'bg-destructive/10' : 'bg-primary/10'
@@ -128,10 +168,10 @@ export function InviteScreen({
         {status === 'success' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
-              <Gift className="w-6 h-6 text-primary animate-wiggle" /> ¡Invitación canjeada!
+              <Gift className="w-6 h-6 text-primary animate-wiggle" /> 
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              Se añadieron $1,000.00 a la cuenta.
+              .
             </p>
           </>
         )}

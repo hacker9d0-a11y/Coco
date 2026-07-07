@@ -88,7 +88,17 @@
   --radius: 0.75rem; /* rounded-xl for cards, rounded-lg internal */
 }
 
-@layer base {@layer utilities {
+@layer base {@layer utilities {@keyframes terminal-scroll {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+  .animate-terminal-scroll {
+    animation: terminal-scroll 8s linear infinite;
+  }
   @keyframes float-up {
     0% {
       transform: translateY(0) translateX(0);
