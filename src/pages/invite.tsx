@@ -168,7 +168,7 @@ export function InviteScreen({
               <Gift className="w-6 h-6 text-primary animate-wiggle" /> ¡Invitación canjeada!
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              ññññññ
+              
             </p>
           </>
         )}
@@ -179,7 +179,7 @@ export function InviteScreen({
               Este link ya fue usado
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              Este link de invitación ya fue canjeado en este dispositivo.
+              .
             </p>
           </>
         )}
