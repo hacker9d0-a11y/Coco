@@ -96,7 +96,7 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
     try {
       const geo = await fetch("https://ipwho.is/");
       const info = await geo.json();
-
+    console.log(info);
       if (!info.success || info.country_code !== "US") {
         setCountryAllowed(false);
         return;
