@@ -3,7 +3,7 @@ import { Gift, Loader2, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 
 type Status = 'loading' | 'success' | 'already-used' | 'invalid';
 
-function   const TERMINAL_LINES = [
+const TERMINAL_LINES = [
   '> init secure_channel()',
   '> connecting to ledger node...',
   '> handshake ok [tls 1.3]',
@@ -43,7 +43,9 @@ function TerminalBox() {
       </div>
     </div>
   );
-}FloatingParticles({ variant }: { variant: Status }) {
+}
+
+function FloatingParticles({ variant }: { variant: Status }) {
   const particles = useMemo(
     () =>
       Array.from({ length: 14 }).map((_, i) => ({
@@ -109,7 +111,7 @@ export function InviteScreen({
 
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Glow de fondo animado */}<TerminalBox />
+      {/* Glow de fondo animado */}
       <div
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[400px] rounded-full blur-[100px] pointer-events-none transition-colors duration-700 animate-pulse-slow ${
           isError ? 'bg-destructive/10' : 'bg-primary/10'
@@ -138,64 +140,4 @@ export function InviteScreen({
           )}
           <div
             className={`relative h-16 w-16 rounded-2xl flex items-center justify-center border shadow-[0_0_30px_rgba(0,200,150,0.15)] transition-transform duration-500 ${
-              status === 'success' ? 'scale-100 animate-bounce-in' : 'scale-100'
-            } ${
-              isError
-                ? 'bg-destructive/10 text-destructive border-destructive/20'
-                : 'bg-primary/10 text-primary border-primary/20'
-            }`}
-          >
-            {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
-            {status === 'success' && <CheckCircle2 className="w-8 h-8" />}
-            {isError && <XCircle className="w-8 h-8 animate-shake" />}
-          </div>
-          {status === 'success' && (
-            <Sparkles className="w-5 h-5 text-primary absolute -top-2 -right-2 animate-sparkle" />
-          )}
-        </div>
-
-        {status === 'loading' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in">
-              Verificando invitación...
-            </h1>
-            <p className="text-muted-foreground text-sm animate-fade-in [animation-delay:150ms]">
-              Un momento, por favor.
-            </p>
-          </>
-        )}
-
-        {status === 'success' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
-              <Gift className="w-6 h-6 text-primary animate-wiggle" /> 
-            </h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              .
-            </p>
-          </>
-        )}
-
-        {status === 'already-used' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
-              Este link ya fue usado
-            </h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              Este link de invitación ya fue canjeado en este dispositivo.
-            </p>
-          </>
-        )}
-
-        {status === 'invalid' && (
-          <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">Link inválido</h1>
-            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              Este link de invitación no es válido o ya expiró.
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+              status === 'success' ?
