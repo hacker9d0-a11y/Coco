@@ -86,51 +86,49 @@ export function InviteScreen({
 }) {
   const [status, setStatus] = useState<Status>('loading');
   const [mounted, setMounted] = useState(false);
-const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
+  const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
   const [, navigate] = useLocation();
 
+  // ✅ Arreglamos la variable que faltaba
+  const isError = status === 'invalid';
+
   useEffect(() => {
-  const verify = async () => {
-    setMounted(true);
+    const verify = async () => {
+      setMounted(true);
 
-    try {
-      const geo = await fetch("https://ipwho.is/");
-      const info = await geo.json();
-    console.log(info);
-      if (!info.success || info.country_code !== "US") {
-        setCountryAllowed(false);
-        return;
-      }
+      try {
+        // ✅ QUITAMOS EL BLOQUEO DE PAÍS: funciona en todo el mundo
+        setCountryAllowed(true);
 
-      setCountryAllowed(true);
+        // Continuamos validando el token normalmente
+        const result = await useInviteLink(token);
 
-      const result = await useInviteLink(token);
-
-      if (result.success) {
-        setStatus("success");
-      } else if (result.error === "Already used on this device") {
-        setStatus("already-used");
-      } else {
+        if (result.success) {
+          setStatus("success");
+        } else if (result.error === "Already used on this device") {
+          setStatus("already-used");
+        } else {
+          setStatus("invalid");
+        }
+      } catch {
+        setCountryAllowed(true); // Permitimos acceso aunque falle algo
         setStatus("invalid");
       }
-    } catch {
-      setCountryAllowed(false);
-    }
-  };
+    };
 
-  verify();
-}, [token]);
+    verify();
+  }, [token]);
 
   if (countryAllowed === false) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4">Access Denied</h1>
-        <p>This invitation link is only available in the United States.</p>
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Acceso permitido</h1>
+          <p>Cargando tu simulador...</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -208,9 +206,10 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
               <Gift className="w-6 h-6 text-primary animate-wiggle" />
+              ¡Invitación aceptada!
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              Todo listo para empezar.
             </p>
           </>
         )}
@@ -218,19 +217,21 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
         {status === 'already-used' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
-              
+              Ya usaste esta invitación
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              Haz clic para continuar.
             </p>
           </>
         )}
 
         {status === 'invalid' && (
           <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up"></h1>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
+              Invitación no válida
+            </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              Verifica el enlace.
             </p>
           </>
         )}
