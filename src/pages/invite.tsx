@@ -178,4 +178,34 @@ export function InviteScreen({
         {status === 'success' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
-              <Gift className="w-6 h-6
+              <Gift className="w-6 h-6 text-primary animate-wiggle" /> ¡Invitación canjeada!
+            </h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              ññññññ
+            </p>
+          </>
+        )}
+
+        {status === 'already-used' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
+              Este link ya fue usado
+            </h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              Este link de invitación ya fue canjeado en este dispositivo.
+            </p>
+          </>
+        )}
+
+        {status === 'invalid' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">Link inválido</h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              Este link de invitación no es válido o ya expiró.
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
