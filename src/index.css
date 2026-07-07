@@ -88,17 +88,17 @@
   --radius: 0.75rem; /* rounded-xl for cards, rounded-lg internal */
 }
 
-@layer base {@layer utilities {@keyframes terminal-scroll {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-50%);
-    }
+@layer base {
+  * {
+    @apply border-border;
   }
-  .animate-terminal-scroll {
-    animation: terminal-scroll 8s linear infinite;
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
   }
+}
+
+@layer utilities {
   @keyframes float-up {
     0% {
       transform: translateY(0) translateX(0);
@@ -227,6 +227,15 @@
     }
   }
 
+  @keyframes terminal-scroll {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
   .animate-float-up {
     animation: float-up linear infinite;
   }
@@ -266,12 +275,8 @@
   .animate-sparkle {
     animation: sparkle 1.5s ease-in-out infinite;
   }
-}
-  * {
-    @apply border-border;
-  }
 
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
+  .animate-terminal-scroll {
+    animation: terminal-scroll 8s linear infinite;
   }
 }

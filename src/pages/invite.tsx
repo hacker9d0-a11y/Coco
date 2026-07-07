@@ -140,4 +140,66 @@ export function InviteScreen({
           )}
           <div
             className={`relative h-16 w-16 rounded-2xl flex items-center justify-center border shadow-[0_0_30px_rgba(0,200,150,0.15)] transition-transform duration-500 ${
-              status === 'success' ?
+              status === 'success' ? 'scale-100 animate-bounce-in' : 'scale-100'
+            } ${
+              isError
+                ? 'bg-destructive/10 text-destructive border-destructive/20'
+                : 'bg-primary/10 text-primary border-primary/20'
+            }`}
+          >
+            {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
+            {status === 'success' && <CheckCircle2 className="w-8 h-8" />}
+            {isError && <XCircle className="w-8 h-8 animate-shake" />}
+          </div>
+          {status === 'success' && (
+            <Sparkles className="w-5 h-5 text-primary absolute -top-2 -right-2 animate-sparkle" />
+          )}
+        </div>
+
+        {status === 'loading' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in">
+              Verificando invitación...
+            </h1>
+            <p className="text-muted-foreground text-sm animate-fade-in [animation-delay:150ms]">
+              Un momento, por favor.
+            </p>
+          </>
+        )}
+
+        {status === 'success' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
+              <Gift className="w-6 h-6 text-primary animate-wiggle" /> ¡Invitación canjeada!
+            </h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              ññññññ
+            </p>
+          </>
+        )}
+
+        {status === 'already-used' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
+              Este link ya fue usado
+            </h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              Este link de invitación ya fue canjeado en este dispositivo.
+            </p>
+          </>
+        )}
+
+        {status === 'invalid' && (
+          <>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">Link inválido</h1>
+            <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
+              Este link de invitación no es válido o ya expiró.
+            </p>
+          </>
+        )}
+      </div>
+
+      <TerminalBox />
+    </div>
+  );
+}
