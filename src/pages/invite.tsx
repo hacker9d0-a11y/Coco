@@ -21,25 +21,17 @@ const TERMINAL_LINES = [
 ];
 
 function TerminalBox() {
-  const lines = [...TERMINAL_LINES, ...TERMINAL_LINES];
+  const lines = [...TERMINAL_LINES, ...TERMINAL_LINES, ...TERMINAL_LINES];
 
   return (
-    <div className="w-full max-w-[420px] mt-8 rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10 bg-white/[0.03]">
-        <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
-        <span className="h-2.5 w-2.5 rounded-full bg-primary/70" />
-        <span className="ml-2 text-[10px] text-white/40 font-mono">terminal</span>
-      </div>
-      <div className="relative h-40 overflow-hidden font-mono text-[11px] leading-5">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 pointer-events-none" />
-        <div className="animate-terminal-scroll px-4 py-3">
-          {lines.map((line, i) => (
-            <div key={i} className="whitespace-nowrap text-primary/70">
-              {line}
-            </div>
-          ))}
-        </div>
+    <div className="fixed inset-0 -z-10 bg-black overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 pointer-events-none" />
+      <div className="animate-terminal-scroll px-6 py-4 font-mono text-[11px] leading-5">
+        {lines.map((line, i) => (
+          <div key={i} className="whitespace-nowrap text-primary/70">
+            {line}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -111,6 +103,9 @@ export function InviteScreen({
 
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Terminal a pantalla completa (fondo) */}
+      <TerminalBox />
+
       {/* Glow de fondo animado */}
       <div
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[400px] rounded-full blur-[100px] pointer-events-none transition-colors duration-700 animate-pulse-slow ${
@@ -149,7 +144,7 @@ export function InviteScreen({
           >
             {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
             {status === 'success' && <CheckCircle2 className="w-8 h-8" />}
-            {isError && <XCircle className="w-8 h-8 animate-shake" />}
+            {status === 'invalid' && <XCircle className="w-8 h-8 animate-shake" />}
           </div>
           {status === 'success' && (
             <Sparkles className="w-5 h-5 text-primary absolute -top-2 -right-2 animate-sparkle" />
@@ -198,8 +193,6 @@ export function InviteScreen({
           </>
         )}
       </div>
-
-      <TerminalBox />
     </div>
   );
 }
