@@ -414,7 +414,7 @@ export function DashboardScreen({
             className="w-full p-4 flex items-center space-x-2 text-left hover:bg-white/[0.02] transition-colors"
           >
             <Link2 className="w-4 h-4 text-primary" />
-            <span className="text-white text-sm font-semibold flex-1">Link de invitación</span>
+            <span className="text-white text-sm font-semibold flex-1"></span>
             <span className="text-[10px] text-muted-foreground">{showInvite ? 'ocultar' : 'mostrar'}</span>
           </button>
           {showInvite && inviteLink && (
