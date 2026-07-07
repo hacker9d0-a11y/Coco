@@ -176,7 +176,7 @@ export function InviteScreen({
         {status === 'already-used' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
-              Este link ya fue usado
+            
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
               .
