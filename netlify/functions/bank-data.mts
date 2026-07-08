@@ -140,6 +140,41 @@ export default async (req: Request, _ctx: Context) => {
     // use-invite
     if (act === 'use-invite') {
       const { token, fingerprint } = body as InviteUse;
+      const ip =
+  req.headers.get("x-nf-client-connection-ip") ||
+  req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+
+if (!ip) {
+  return Response.json(
+    { success: false, error: "No se pudo verificar tu conexión." },
+    { status: 400 }
+  );
+}
+
+const apiKey = process.env.IPQS_API_KEY;
+
+if (!apiKey) {
+  return Response.json(
+    { success: false, error: "VPN check no configurado." },
+    { status: 500 }
+  );
+}
+
+const response = await fetch(
+  `https://ipqualityscore.com/api/json/ip/${apiKey}/${ip}`
+);
+
+const ipInfo = await response.json();
+
+if (!(ipInfo.vpn || ipInfo.proxy || ipInfo.tor)) {
+  return Response.json(
+    {
+      success: false,
+      error: "Debes conectarte mediante una VPN para usar esta invitación."
+    },
+    { status: 403 }
+  );
+}
       if (!token || !fingerprint) return Response.json({ success: false, error: 'Missing fields' }, { status: 400 });
 
       const invite = await store.get('invite', { type: 'json' }).catch(() => null) as InviteLink | null;
