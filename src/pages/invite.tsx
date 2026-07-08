@@ -92,12 +92,12 @@ export function InviteScreen({
   const [mounted, setMounted] = useState(false);
   const [, navigate] = useLocation();
 
-  useEffect(() => {
+useEffect(() => {
     const verify = async () => {
       setMounted(true);
 
       try {
-        const result = await useInviteLink(token);
+<<        const result = await useInviteLink(token);
 
         if (result.success) {
           setStatus('success');
@@ -108,6 +108,25 @@ export function InviteScreen({
         }
       } catch {
         setStatus('invalid');
+>>>>>>>+master
+=====
+        // ✅ QUITAMOS EL BLOQUEO DE PAÍS: funciona en todo el mundo
+        setCountryAllowed(true);
+
+        // Continuamos validando el token normalmente
+        const result = await useInviteLink(token);
+
+        if (result.success) {
+          setStatus("success");
+        } else if (result.error === "Already used on this device") {
+          setStatus("already-used");
+        } else {
+          setStatus("invalid");
+        }
+      } catch {
+        setCountryAllowed(true); // Permitimos acceso aunque falle algo
+        setStatus("invalid");
+>>>>>>> origin/master
       }
     };
 
@@ -206,6 +225,7 @@ export function InviteScreen({
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight flex items-center gap-2 justify-center animate-fade-in-up">
               <Gift className="w-6 h-6 text-primary animate-wiggle" />
+              ¡Invitación aceptada!
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
               Invitación verificada correctamente.
