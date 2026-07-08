@@ -9,7 +9,6 @@ const TERMINAL_LINES = [
   '> connecting to ledger node...',
   '> handshake ok [tls 1.3]',
   '> resolving invite_token',
-  '> checking device_fingerprint',
   '> validating signature...',
   '> querying balance_service',
   '> sync block #48213',
@@ -53,11 +52,15 @@ function FloatingParticles({ variant }: { variant: Status }) {
   );
 
   const color =
-    variant === 'success' ? 'bg-primary/40' : variant === 'invalid' ? 'bg-destructive/30' : 'bg-primary/20';
+    variant === 'success'
+      ? 'bg-primary/40'
+      : variant === 'invalid'
+      ? 'bg-destructive/30'
+      : 'bg-primary/20';
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map(p => (
+      {particles.map((p) => (
         <span
           key={p.id}
           className={`absolute rounded-full ${color} animate-float-up`}
@@ -68,7 +71,7 @@ function FloatingParticles({ variant }: { variant: Status }) {
             height: p.size,
             animationDuration: `${p.duration}s`,
             animationDelay: `${p.delay}s`,
-            // @ts-ignore custom property consumed by keyframes
+            // @ts-ignore
             '--drift': `${p.drift}px`,
           }}
         />
@@ -76,75 +79,53 @@ function FloatingParticles({ variant }: { variant: Status }) {
     </div>
   );
 }
-
 export function InviteScreen({
   token,
   useInviteLink,
 }: {
   token: string;
-  useInviteLink: (token: string) => Promise<{ success: boolean; error?: string; bonus?: number }>;
+  useInviteLink: (
+    token: string
+  ) => Promise<{ success: boolean; error?: string; bonus?: number }>;
 }) {
   const [status, setStatus] = useState<Status>('loading');
   const [mounted, setMounted] = useState(false);
-const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
   const [, navigate] = useLocation();
 
   useEffect(() => {
-  const verify = async () => {
-    setMounted(true);
+    const verify = async () => {
+      setMounted(true);
 
-    try {
-      const geo = await fetch("https://ipwho.is/");
-      const info = await geo.json();
-    console.log(info);
-      if (!info.success || info.country_code !== "US") {
-        setCountryAllowed(false);
-        return;
+      try {
+        const result = await useInviteLink(token);
+
+        if (result.success) {
+          setStatus('success');
+        } else if (result.error === 'Already used on this device') {
+          setStatus('already-used');
+        } else {
+          setStatus('invalid');
+        }
+      } catch {
+        setStatus('invalid');
       }
+    };
 
-      setCountryAllowed(true);
+    verify();
+  }, [token, useInviteLink]);
 
-      const result = await useInviteLink(token);
-
-      if (result.success) {
-        setStatus("success");
-      } else if (result.error === "Already used on this device") {
-        setStatus("already-used");
-      } else {
-        setStatus("invalid");
-      }
-    } catch {
-      setCountryAllowed(false);
-    }
-  };
-
-  verify();
-}, [token]);
-
-  if (countryAllowed === false) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4">Access Denied</h1>
-        <p>This invitation link is only available in the United States.</p>
-      </div>
-    </div>
-  );
-}
+  const isError = status === 'invalid';
 
   return (
     <div className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Terminal a pantalla completa (fondo) */}
       <TerminalBox />
 
-      {/* Glow de fondo animado */}
       <div
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[400px] rounded-full blur-[100px] pointer-events-none transition-colors duration-700 animate-pulse-slow ${
           isError ? 'bg-destructive/10' : 'bg-primary/10'
         }`}
       />
 
-      {/* Partículas flotantes */}
       <FloatingParticles variant={status} />
 
       <div
@@ -153,7 +134,7 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         } animate-fade-in-up`}
       >
-        {/* Icono con anillos pulsantes */}
+
         <div className="relative h-20 w-20 flex items-center justify-center mb-6">
           {status === 'success' && (
             <>
@@ -161,16 +142,22 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
               <span className="absolute -inset-2 rounded-2xl border border-primary/20 animate-spin-slow" />
             </>
           )}
+
           {status === 'loading' && (
             <span className="absolute inset-0 rounded-2xl border-2 border-primary/20 border-t-primary animate-spin" />
           )}
+
           <button
             type="button"
-            onClick={() => (status === 'already-used' || status === 'success') && navigate('/party')}
+            onClick={() =>
+              (status === 'already-used' || status === 'success') &&
+              navigate('/party')
+            }
             disabled={status !== 'already-used' && status !== 'success'}
-            aria-label={status === 'already-used' || status === 'success' ? 'Click' : undefined}
             className={`relative h-16 w-16 rounded-2xl flex items-center justify-center border shadow-[0_0_30px_rgba(0,200,150,0.15)] transition-transform duration-500 ${
-              status === 'success' ? 'scale-100 animate-bounce-in' : 'scale-100'
+              status === 'success'
+                ? 'animate-bounce-in'
+                : ''
             } ${
               status === 'already-used' || status === 'success'
                 ? 'cursor-pointer hover:scale-105 active:scale-95'
@@ -181,16 +168,27 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
                 : 'bg-primary/10 text-primary border-primary/20'
             }`}
           >
-            {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
-            {status === 'success' && <CheckCircle2 className="w-8 h-8" />}
-            {status === 'invalid' && <XCircle className="w-8 h-8 animate-shake" />}
+            {status === 'loading' && (
+              <Loader2 className="w-8 h-8 animate-spin" />
+            )}
+
+            {status === 'success' && (
+              <CheckCircle2 className="w-8 h-8" />
+            )}
+
+            {status === 'invalid' && (
+              <XCircle className="w-8 h-8 animate-shake" />
+            )}
           </button>
+
           {status === 'success' && (
             <Sparkles className="w-5 h-5 text-primary absolute -top-2 -right-2 animate-sparkle" />
           )}
         </div>
-        {(status === 'already-used' || status === 'success') && (
-          <span className="text-[11px] text-muted-foreground/70 -mt-4 mb-4 tracking-wide uppercase">Click</span>
+                {(status === 'already-used' || status === 'success') && (
+          <span className="text-[11px] text-muted-foreground/70 -mt-4 mb-4 tracking-wide uppercase">
+            Click
+          </span>
         )}
 
         {status === 'loading' && (
@@ -210,7 +208,7 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
               <Gift className="w-6 h-6 text-primary animate-wiggle" />
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              Invitación verificada correctamente.
             </p>
           </>
         )}
@@ -218,19 +216,21 @@ const [countryAllowed, setCountryAllowed] = useState<boolean | null>(null);
         {status === 'already-used' && (
           <>
             <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
-              
+              Invitación ya utilizada
             </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              Puedes continuar.
             </p>
           </>
         )}
 
         {status === 'invalid' && (
           <>
-            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up"></h1>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight animate-fade-in-up">
+              Invitación inválida
+            </h1>
             <p className="text-muted-foreground text-sm animate-fade-in-up [animation-delay:150ms]">
-              
+              No se pudo verificar la invitación.
             </p>
           </>
         )}
