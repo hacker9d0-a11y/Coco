@@ -354,25 +354,25 @@ export function DashboardScreen({
               {formatCurrency(balance)}
             </span>
           </div>
-          <p className="text-muted-foreground text-xs mb-8">Cuenta terminada en 0001</p>
-          <div className="bg-[#0c1219] rounded-xl p-4 border border-card-border relative overflow-hidden">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-primary font-semibold text-sm">+{formatCurrency(hourlyRate)} / hora</span>
-              </div>
-              <div className="flex items-center space-x-1.5 text-muted-foreground">
-                <Clock className="w-3.5 h-3.5" />
-                <span data-testid="text-timer" className="text-sm font-medium tabular-nums">{timerText}</span>
-              </div>
-            </div>
-            <div className="h-1.5 w-full bg-card rounded-full overflow-hidden mb-3">
-              <div className="h-full bg-primary rounded-full transition-all duration-1000 ease-linear" style={{ width: `${progress}%` }} />
-            </div>
-            <p className="text-[11px] text-muted-foreground text-center font-medium">
-              Próximo {formatCurrency(hourlyRate)} acreditado en {timerText}
-            </p>
-          </div>
+          <p className="text-muted-foreground text-xs mb-8">  </p>
+          <div className="bg-black border border-gray-700 rounded-xl p-4 font-mono text-sm shadow-lg">
+  <div className="flex items-center gap-2 mb-3">
+    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+    <span className="ml-2 text-gray-400">terminal</span>
+  </div>
+
+  <p className="text-green-400">$ sudo start-bank</p>
+  <p className="text-white">Inicializando sistema...</p>
+  <p className="text-white">Conectando a la red...</p>
+  <p className="text-green-400">✓ Sistema listo.</p>
+  <p className="text-cyan-400">
+    Producción: <span className="text-white">${hourlyRate}/hora</span>
+  </p>
+
+  <span className="animate-pulse text-white">█</span>
+</div>
         </div>
 
         {/* Notifications */}
