@@ -636,7 +636,7 @@ export function DashboardScreen({
           <div className="p-4 border-b border-card-border flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Users className="w-4 h-4 text-primary" />
-              <h3 className="text-white text-sm font-semibold">Historial de usuarios</h3>
+              <h3 className="text-white text-sm font-semibold"></h3>
             </div>
             <span className="text-[10px] text-primary font-semibold bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
               +{formatCurrency(visitorBonus)} generado
