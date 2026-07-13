@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const EXPIRY_KEY = 'randy_bank_session_expiry';
+const EXPIRY_KEY = '__session_expiry';
 const FINGERPRINT_KEY = 'randy_bank_fp';
 const API_URL = '/api/bank-data';
 const SESSION_DAYS = 30;

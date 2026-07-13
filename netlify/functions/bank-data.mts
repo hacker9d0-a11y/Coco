@@ -1,7 +1,7 @@
 import type { Context } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 
-const STORE = 'randy-bank';
+const STORE = '-';
 
 type AccountData = {
   hash: string;
