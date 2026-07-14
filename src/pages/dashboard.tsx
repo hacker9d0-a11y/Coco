@@ -316,7 +316,7 @@ export function DashboardScreen({
               <Building className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-white font-bold tracking-tight text-sm">RANDY ALEJANDRO</h1>
+              <h1 className="text-white font-bold tracking-tight text-sm">Lala</h1>
               <p className="text-muted-foreground text-xs font-medium">Generative Savings Account</p>
             </div>
           </div>
